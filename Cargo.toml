@@ -1,0 +1,7 @@
+[package]
+name = "suoi_types"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+nerd ={ path = "../nerd-rs"}
