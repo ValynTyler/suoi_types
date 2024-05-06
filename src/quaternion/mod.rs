@@ -2,12 +2,12 @@ use std::ops::{Add, Mul};
 
 use nerd::vector::Vector3;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Quaternion {
-    a: f32,
-    b: f32,
-    c: f32,
-    d: f32,
+    pub a: f32,
+    pub b: f32,
+    pub c: f32,
+    pub d: f32,
 }
 
 // Conversions
