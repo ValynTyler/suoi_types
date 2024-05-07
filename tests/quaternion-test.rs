@@ -24,6 +24,11 @@ fn rotate_30() {
 #[test]
 fn angle_axis_45() {
     let q = Quaternion::axis_angle(Vector3::UP, Deg(45.));
-
     assert_eq!(q, Quaternion::new(0.70710677, 0.0, 0.70710677, 0.0));
+}
+
+#[test]
+fn recip_45() {
+    let q = Quaternion::axis_angle(Vector3::UP, Deg(45.));
+    assert_eq!(q.recip(), Quaternion::new(0.7071068, -0.0, -0.7071068, -0.0));
 }

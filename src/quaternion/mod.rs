@@ -69,11 +69,34 @@ impl Quaternion {
         }
     }
 
+    #[rustfmt::skip]
+    pub fn conj(&self) -> Self {
+        Self {
+            a:  self.a,
+            b: -self.b,
+            c: -self.c,
+            d: -self.d,
+        }
+    }
+
+    pub fn norm(&self) -> f32 {
+        (*self * self.conj()).a
+    }
+
+    pub fn recip(&self) -> Self {
+        Self {
+            a: (self.conj().a) / (self.norm() * self.norm()),
+            b: (self.conj().b) / (self.norm() * self.norm()),
+            c: (self.conj().c) / (self.norm() * self.norm()),
+            d: (self.conj().d) / (self.norm() * self.norm()),
+        }
+    }
+
     pub fn axis_angle<A>(axis: Vector3, angle: A) -> Self
     where
         A: Angle,
     {
-        Quaternion::from(axis * angle.rad().0.sin()) + angle.rad().0.cos()
+        Quaternion::from(axis * (angle.rad().0 / 2.).sin()) + (angle.rad().0 / 2.).cos()
     }
 
     #[rustfmt::skip]
