@@ -101,17 +101,13 @@ impl Quaternion {
 
     #[rustfmt::skip]
     pub fn mat(&self) -> Matrix4 {
-        let (w, x, y, z) = (self.a, self.b, self.c, self.d);
+        let q = self;
+        let (r, i, j, k) = (q.a, q.b, q.c, q.d);
         Matrix4([
-             w,  z, -y,  x,
-            -z,  w,  x,  y,
-             y, -x,  w,  z,
-            -x, -y, -z,  w,
-        ]) * Matrix4([
-            w,  z, -y, -x,
-           -z,  w,  x, -y,
-            y, -x,  w, -z,
-            x,  y,  z,  w,
+            1. - 2.*(j*j + k*k),    2.*(i*j - k*r),         2.*(i*k + j*r),         0.,
+            2.*(i*j + k*r),         1. - 2.*(i*i + k*k),    2.*(j*k - i*r),         0.,
+            2.*(i*k - j*r),         2.*(j*k + i*r),         1. - 2.*(i*i + j*j),    0.,
+            0.,                     0.,                     0.,                     1.,
         ])
     }
 }
