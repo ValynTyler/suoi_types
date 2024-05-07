@@ -17,6 +17,12 @@ impl From<Vector3> for Quaternion {
     }
 }
 
+impl Into<Vector3> for Quaternion {
+    fn into(self) -> Vector3 {
+        self.vector_part()
+    }
+}
+
 #[rustfmt::skip]
 impl Into<Matrix4> for Quaternion {
     fn into(self) -> Matrix4 {
@@ -102,5 +108,13 @@ impl Mul for Quaternion {
             c: a1 * c2 + c1 * a2 - b1 * d2 + d1 * b2,
             d: a1 * d2 + d1 * a2 + b1 * c2 - c1 * b2,
         }
+    }
+}
+
+impl Mul<Vector3> for Quaternion {
+    type Output = Vector3;
+
+    fn mul(self, rhs: Vector3) -> Self::Output {
+        (self * Self::from(rhs)).into()
     }
 }

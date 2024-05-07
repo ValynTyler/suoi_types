@@ -1,22 +1,15 @@
+use nerd::{matrix::Matrix4, vector::{Vector, Vector3, Vector4}};
 use suoi_types::Quaternion;
 
 fn main() {
-    let q = Quaternion {
-        a: 1.0,
-        b: 2.0,
-        c: 3.0,
-        d: 4.0
-    };
+    let axis = Vector3::new(0., 1., 0.).normalize();
+    let angle = f32::to_degrees(90.);
 
-    let r = Quaternion {
-        a: 1.0,
-        b: 2.0,
-        c: 3.0,
-        d: 5.0
-    };
+    let v = Vector3::new(1., 0., 0.);
+    let q = Quaternion::axis_angle(axis, angle);
+    let r: Matrix4 = q.into();
 
     println!("{:?}", q);
-    println!("{:?}", r);
-    println!("{:?}", q * r);
-    println!("{:?}", r * q);
+    println!("{:?}", v);
+    println!("{:?}", r * Vector4::from(v.into()));
 }
