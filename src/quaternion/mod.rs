@@ -1,6 +1,6 @@
 use std::ops::{Add, Mul};
 
-use nerd::vector::Vector3;
+use nerd::{matrix::Matrix4, vector::Vector3};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Quaternion {
@@ -17,12 +17,32 @@ impl From<Vector3> for Quaternion {
     }
 }
 
+#[rustfmt::skip]
+impl Into<Matrix4> for Quaternion {
+    fn into(self) -> Matrix4 {
+        let (w, x, y, z) = (self.a, self.b, self.c, self.d);
+        Matrix4([
+             w,  z, -y,  x,
+            -z,  w,  x,  y,
+             y, -x,  w,  z,
+            -x, -y, -z,  w,
+        ]) * Matrix4([
+            w,  z, -y, -x,
+           -z,  w,  x, -y,
+            y, -x,  w, -z,
+            x,  y,  z,  w,
+        ])
+
+    }
+}
+
 // Methods
 impl Quaternion {
     pub fn new(a: f32, b: f32, c: f32, d: f32) -> Self {
         Self { a, b, c, d }
     }
 
+    /// returns the length of `self`
     pub fn len(&self) -> f32 {
         self.a * self.a + self.b * self.b + self.c * self.c + self.d * self.d
     }
@@ -37,16 +57,22 @@ impl Quaternion {
         self.vector_part()
     }
 
+    /// returns the scalar part of `self`
     pub fn scalar_part(&self) -> f32 {
         self.a
     }
 
+    /// returns the vector part of `self`
     pub fn vector_part(&self) -> Vector3 {
         Vector3 {
             x: self.b,
             y: self.c,
             z: self.d,
         }
+    }
+
+    pub fn axis_angle(axis: Vector3, angle: f32) -> Self {
+        Quaternion::from(axis * (angle / -2.).sin()) + (angle / -2.).cos()
     }
 }
 
