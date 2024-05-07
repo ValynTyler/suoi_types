@@ -1,5 +1,5 @@
-use nerd::{matrix::Matrix4, vector::Vector3};
-use suoi_types::{Angle, Deg, Quaternion};
+use nerd::{matrix::{Matrix, Matrix4}, vector::{Vector, Vector3}};
+use suoi_types::{Angle, Deg, Quaternion, Rotate};
 
 #[test]
 fn empty() {
@@ -62,4 +62,19 @@ fn mat_60() {
          0.0,           0.0, 0.0,       1.0,
     ])
     )
+}
+
+#[test]
+fn fwd_column() {
+    let q = Quaternion::axis_angle(Vector3::UP, Deg(10.));
+    
+    let mat = q.mat();
+    let fwd = Vector3 {
+        x: mat.get(1, 3),
+        y: mat.get(2, 3),
+        z: mat.get(3, 3),
+    };
+    assert!(
+        (fwd - Vector3::FORWARD.to_owned().rotate(q)).len() < 0.0001
+    );
 }
