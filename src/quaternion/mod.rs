@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul};
+use std::{fmt::Display, ops::{Add, Mul}};
 
 use nerd::{matrix::Matrix4, vector::Vector3};
 
@@ -121,5 +121,13 @@ impl Mul<Vector3> for Quaternion {
 
     fn mul(self, rhs: Vector3) -> Self::Output {
         (self * Self::from(rhs)).into()
+    }
+}
+
+// Display
+impl Display for Quaternion {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({} {} {} {})", self.a, self.b, self.c, self.d)?;
+        Ok(())
     }
 }

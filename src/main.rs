@@ -1,18 +1,8 @@
-use nerd::{
-    matrix::Matrix4,
-    vector::{Vector, Vector3, Vector4},
-};
-use suoi_types::{
-    Angle::{self, Deg},
-    Quaternion, Transform,
-};
+use suoi_types::Quaternion;
 
 fn main() {
-    let mut t = Transform::default();
-
-    let axis = Vector3::UP;
-    let angle = Angle::Deg(90.0);
-    // t.set_rotation(Quaternion::axis_angle(axis, angle));
-
-    println!("{}", t.rotation().mat());
+    let q = Quaternion::new(0.707, 0.5, 0.5, 0.0);
+    
+    println!("{}", q);
+    println!("{}", q.mat());
 }
