@@ -23,6 +23,10 @@ impl Quaternion {
         Self { a, b, c, d }
     }
 
+    pub fn len(&self) -> f32 {
+        self.a * self.a + self.b * self.b + self.c * self.c + self.d * self.d
+    }
+
     /// returns the real part of `self`
     pub fn re(&self) -> f32 {
         self.scalar_part()
@@ -67,10 +71,10 @@ impl Mul for Quaternion {
         let (c1, c2) = (self.c, rhs.c);
         let (d1, d2) = (self.d, rhs.d);
         Self {
-            a: a1*a2 - b1*b2 - c1*c2 - d1*d2,
-            b: a1*b2 + b1*a2 + c1*d2 - d1*c2,
-            c: a1*c2 + c1*a2 - b1*d2 + d1*b2,
-            d: a1*d2 + d1*a2 + b1*c2 - c1*b2,
+            a: a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2,
+            b: a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2,
+            c: a1 * c2 + c1 * a2 - b1 * d2 + d1 * b2,
+            d: a1 * d2 + d1 * a2 + b1 * c2 - c1 * b2,
         }
     }
 }
