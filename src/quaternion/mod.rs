@@ -1,4 +1,7 @@
-use std::{fmt::Display, ops::{Add, Mul}};
+use std::{
+    fmt::Display,
+    ops::{Add, Mul},
+};
 
 use nerd::{matrix::Matrix4, vector::Vector3};
 
@@ -66,8 +69,11 @@ impl Quaternion {
         }
     }
 
-    pub fn axis_angle(axis: Vector3, angle: Angle) -> Self {
-        Quaternion::from(axis * (angle.rad() / -2.).sin()) + (angle.rad() / -2.).cos()
+    pub fn axis_angle<A>(axis: Vector3, angle: A) -> Self
+    where
+        A: Angle,
+    {
+        Quaternion::from(axis * (angle.rad().num() / -2.).sin()) + (angle.rad().num() / -2.).cos()
     }
 
     #[rustfmt::skip]

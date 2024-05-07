@@ -1,38 +1,63 @@
-pub use Angle::*;
+#[derive(Clone, Copy)]
+pub struct Rad(pub f32);
 
-#[derive(Debug, Clone, Copy)]
-pub enum Angle {
-    Deg(f32),
-    Rad(f32),
-}
+#[derive(Clone, Copy)]
+pub struct Deg(pub f32);
 
-impl From<f32> for Angle {
-    fn from(value: f32) -> Self {
-        Angle::Rad(value)
+impl Into<Deg> for Rad {
+    fn into(self) -> Deg {
+        Deg(self.0.to_degrees())
     }
 }
 
-impl Into<f32> for Angle {
+impl Into<Rad> for Deg {
+    fn into(self) -> Rad {
+        Rad(self.0.to_radians())
+    }
+}
+
+impl Into<f32> for Rad {
     fn into(self) -> f32 {
-        match self {
-            Angle::Deg(d) => d.to_radians(),
-            Angle::Rad(r) => r,
-        }
+        self.0
     }
 }
 
-impl Angle {
-    pub fn rad(self) -> f32 {
-        match self {
-            Angle::Deg(d) => d.to_radians(),
-            Angle::Rad(r) => r,
-        }
+impl Into<f32> for Deg {
+    fn into(self) -> f32 {
+        self.0
+    }
+}
+
+pub trait Angle: Copy {
+    fn deg(self) -> Deg;
+    fn rad(self) -> Rad;
+    fn num(self) -> f32;
+}
+
+impl Angle for Rad {
+    fn deg(self) -> Deg {
+        self.into()
     }
 
-    pub fn deg(self) -> f32 {
-        match self {
-            Angle::Deg(d) => d,
-            Angle::Rad(r) => r.to_degrees(),
-        }
+    fn rad(self) -> Rad {
+        self
+    }
+
+    fn num(self) -> f32 {
+        self.0
+    }
+}
+
+impl Angle for Deg {
+    fn deg(self) -> Deg {
+        self
+    }
+
+    fn rad(self) -> Rad {
+        self.into()
+    }
+
+    fn num(self) -> f32 {
+        self.0
     }
 }

@@ -1,6 +1,6 @@
 use nerd::{matrix::{Matrix, Matrix4}, vector::Vector3};
 
-use crate::{Angle::Deg, Quaternion};
+use crate::{Deg, Quaternion};
 
 pub struct Transform {
     position: Vector3,
