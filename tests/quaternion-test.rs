@@ -49,3 +49,17 @@ fn mat_45() {
     ])
     )
 }
+
+#[test]
+#[rustfmt::skip]
+fn mat_60() {
+    let q = Quaternion::axis_angle(Vector3::UP, Deg(60.));
+
+    assert_eq!(q.mat(), Matrix4([
+         0.5,           0.0, 0.8660254, 0.0,
+         0.0,           1.0, 0.0,       0.0,
+         -0.8660254,    0.0, 0.5,       0.0,
+         0.0,           0.0, 0.0,       1.0,
+    ])
+    )
+}

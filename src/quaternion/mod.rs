@@ -156,3 +156,15 @@ impl Display for Quaternion {
         Ok(())
     }
 }
+
+// Outside implementations
+pub trait Rotate {
+    fn rotate(&mut self, rotation: Quaternion) -> Self;
+}
+
+impl Rotate for Vector3 {
+    fn rotate(&mut self, rotation: Quaternion) -> Self {
+        let q = rotation;
+        (Quaternion::from(q * Vector3::FORWARD) * q.recip()).into()
+    }
+}
