@@ -11,5 +11,5 @@ fn main() {
 
     println!("{:?}", q);
     println!("{:?}", v);
-    println!("{:?}", r * Vector4::from(v.into()));
+    println!("{:?}", &r * Vector4::from(v.into()));
 }

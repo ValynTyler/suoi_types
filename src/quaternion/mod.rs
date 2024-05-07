@@ -28,19 +28,7 @@ impl Into<Vector3> for Quaternion {
 #[rustfmt::skip]
 impl Into<Matrix4> for Quaternion {
     fn into(self) -> Matrix4 {
-        let (w, x, y, z) = (self.a, self.b, self.c, self.d);
-        Matrix4([
-             w,  z, -y,  x,
-            -z,  w,  x,  y,
-             y, -x,  w,  z,
-            -x, -y, -z,  w,
-        ]) * Matrix4([
-            w,  z, -y, -x,
-           -z,  w,  x, -y,
-            y, -x,  w, -z,
-            x,  y,  z,  w,
-        ])
-
+        self.mat()
     }
 }
 
@@ -81,6 +69,21 @@ impl Quaternion {
 
     pub fn axis_angle(axis: Vector3, angle: Angle) -> Self {
         Quaternion::from(axis * (angle.rad() / -2.).sin()) + (angle.rad() / -2.).cos()
+    }
+
+    pub fn mat(&self) -> Matrix4 {
+        let (w, x, y, z) = (self.a, self.b, self.c, self.d);
+        Matrix4([
+             w,  z, -y,  x,
+            -z,  w,  x,  y,
+             y, -x,  w,  z,
+            -x, -y, -z,  w,
+        ]) * Matrix4([
+            w,  z, -y, -x,
+           -z,  w,  x, -y,
+            y, -x,  w, -z,
+            x,  y,  z,  w,
+        ])
     }
 }
 
