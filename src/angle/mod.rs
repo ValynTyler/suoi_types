@@ -31,7 +31,6 @@ impl Into<f32> for Deg {
 pub trait Angle: Copy {
     fn deg(self) -> Deg;
     fn rad(self) -> Rad;
-    fn num(self) -> f32;
 }
 
 impl Angle for Rad {
@@ -42,10 +41,6 @@ impl Angle for Rad {
     fn rad(self) -> Rad {
         self
     }
-
-    fn num(self) -> f32 {
-        self.0
-    }
 }
 
 impl Angle for Deg {
@@ -55,9 +50,5 @@ impl Angle for Deg {
 
     fn rad(self) -> Rad {
         self.into()
-    }
-
-    fn num(self) -> f32 {
-        self.0
     }
 }

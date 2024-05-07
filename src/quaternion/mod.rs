@@ -7,7 +7,7 @@ use nerd::{matrix::Matrix4, vector::Vector3};
 
 use crate::Angle;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Quaternion {
     pub a: f32,
     pub b: f32,
@@ -73,7 +73,7 @@ impl Quaternion {
     where
         A: Angle,
     {
-        Quaternion::from(axis * (angle.rad().num() / -2.).sin()) + (angle.rad().num() / -2.).cos()
+        Quaternion::from(axis * angle.rad().0.sin()) + angle.rad().0.cos()
     }
 
     #[rustfmt::skip]
@@ -133,7 +133,7 @@ impl Mul<Vector3> for Quaternion {
 // Display
 impl Display for Quaternion {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "({} {} {} {})", self.a, self.b, self.c, self.d)?;
+        write!(f, "({}, {}, {}, {})", self.a, self.b, self.c, self.d)?;
         Ok(())
     }
 }
