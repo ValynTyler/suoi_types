@@ -2,6 +2,8 @@ use std::ops::{Add, Mul};
 
 use nerd::{matrix::Matrix4, vector::Vector3};
 
+use crate::Angle;
+
 #[derive(Debug, Clone, Copy)]
 pub struct Quaternion {
     pub a: f32,
@@ -77,8 +79,8 @@ impl Quaternion {
         }
     }
 
-    pub fn axis_angle(axis: Vector3, angle: f32) -> Self {
-        Quaternion::from(axis * (angle / -2.).sin()) + (angle / -2.).cos()
+    pub fn axis_angle(axis: Vector3, angle: Angle) -> Self {
+        Quaternion::from(axis * (angle.rad() / -2.).sin()) + (angle.rad() / -2.).cos()
     }
 }
 
