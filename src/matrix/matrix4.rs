@@ -63,7 +63,7 @@ impl Matrix for Matrix4 {
             1 => self.1[j] = value,
             2 => self.2[j] = value,
             3 => self.3[j] = value,
-            _ => panic!(),
+            _ => panic!("{} {}", i, j),
         }
     }
 
