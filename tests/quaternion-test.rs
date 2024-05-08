@@ -67,9 +67,9 @@ fn fwd_column() {
 
     let mat = q.mat();
     let fwd = Vector3 {
-        x: mat.get(0, 2),
-        y: mat.get(1, 2),
-        z: mat.get(2, 2),
+        x: mat.get(0, 2).unwrap(),
+        y: mat.get(1, 2).unwrap(),
+        z: mat.get(2, 2).unwrap(),
     };
 
     println!("{}", fwd);

@@ -34,27 +34,27 @@ impl Transform {
     pub fn forward(&self) -> Vector3 {
         let mat = self.rotation.mat();
         Vector3 {
-            x: mat.get(0, 2),
-            y: mat.get(1, 2),
-            z: mat.get(2, 2),
+            x: mat.get(0, 2).unwrap(),
+            y: mat.get(1, 2).unwrap(),
+            z: mat.get(2, 2).unwrap(),
         }
     }
 
     pub fn right(&self) -> Vector3 {
         let mat = self.rotation.mat();
         Vector3 {
-            x: mat.get(0, 0),
-            y: mat.get(1, 0),
-            z: mat.get(2, 0),
+            x: mat.get(0, 0).unwrap(),
+            y: mat.get(1, 0).unwrap(),
+            z: mat.get(2, 0).unwrap(),
         }
     }
 
     pub fn up(&self) -> Vector3 {
         let mat = self.rotation.mat();
         Vector3 {
-            x: mat.get(0, 1),
-            y: mat.get(1, 1),
-            z: mat.get(2, 1),
+            x: mat.get(0, 1).unwrap(),
+            y: mat.get(1, 1).unwrap(),
+            z: mat.get(2, 1).unwrap(),
         }
     }
 

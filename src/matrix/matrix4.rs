@@ -1,7 +1,7 @@
 use std::{fmt::Display, ops::Mul};
 
 use crate::Matrix;
-use crate::Vector;
+use crate::OutOfBoundsError;
 use crate::Vector3;
 
 #[allow(unused)]
@@ -47,24 +47,25 @@ impl Matrix for Matrix4 {
         4
     }
 
-    fn get(&self, i: usize, j: usize) -> f32 {
+    fn get(&self, i: usize, j: usize) -> Option<f32> {
         match i {
-            0 => self.0[j],
-            1 => self.1[j],
-            2 => self.2[j],
-            3 => self.3[j],
-            _ => panic!(),
+            0 => Some(self.0[j]),
+            1 => Some(self.1[j]),
+            2 => Some(self.2[j]),
+            3 => Some(self.3[j]),
+            _ => None,
         }
     }
 
-    fn set(&mut self, i: usize, j: usize, value: f32) {
+    fn set(&mut self, i: usize, j: usize, value: f32) -> Result<(), OutOfBoundsError> {
         match i {
             0 => self.0[j] = value,
             1 => self.1[j] = value,
             2 => self.2[j] = value,
             3 => self.3[j] = value,
-            _ => panic!("{} {}", i, j),
-        }
+            _ => return Err(OutOfBoundsError),
+        };
+        Ok(())
     }
 
     fn row(&self, j: usize) -> &[f32] {
@@ -87,8 +88,8 @@ impl Matrix for Matrix4 {
             for j in i..size {
                 let aux = self.get(i, j);
 
-                self.set(i, j, self.get(j, i));
-                self.set(j, i, aux);
+                self.set(i, j, self.get(j, i).unwrap()).unwrap();
+                self.set(j, i, aux.unwrap()).unwrap();
             }
         }
     }
@@ -99,8 +100,8 @@ impl Matrix for Matrix4 {
         clone
     }
     
+    #[rustfmt::skip]
     fn ptr(&self) -> *const f32 {
-                ///
         &self.0[0]
     }
 }
@@ -121,9 +122,9 @@ impl Mul<&Matrix4> for &Matrix4 {
             for j in 0..size {
                 let mut s = 0.0;
                 for k in 0..size {
-                    s += a.get(i, k) * b.get(k, j);
+                    s += a.get(i, k).unwrap() * b.get(k, j).unwrap();
                 }
-                mat.set(i, j, s);
+                mat.set(i, j, s).unwrap();
             }
         }
 
@@ -146,30 +147,10 @@ impl Display for Matrix4 {
 impl Matrix4 {
     pub fn translate(translation: Vector3) -> Matrix4 {
         let mut m = Matrix4::identity();
-        m.set(4, 1, translation.x);
-        m.set(4, 2, translation.y);
-        m.set(4, 3, translation.z);
+        m.set(0, 3, translation.x).unwrap();
+        m.set(1, 3, translation.y).unwrap();
+        m.set(2, 3, translation.z).unwrap();
         m
-    }
-
-    #[rustfmt::skip]
-    pub fn look_at(up: Vector3, right: Vector3, forward: Vector3, position: Vector3) -> Matrix4 {
-        let u = up;
-        let r = right;
-        let f = forward;
-
-        let t = Vector3 {
-            x: -r.dot(position),
-            y: -u.dot(position),
-            z: -f.dot(position),
-        };
-
-        Self(
-           [ r.x,  u.x,  f.x, 0.],
-           [ r.y,  u.y,  f.y, 0.],
-           [ r.z,  u.z,  f.z, 0.],
-           [-t.x, -t.y, -t.z, 1.],
-       )
     }
 
     #[rustfmt::skip]
