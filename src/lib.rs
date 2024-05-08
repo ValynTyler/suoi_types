@@ -6,3 +6,6 @@ pub use quaternion::*;
 
 pub mod transform;
 pub use transform::*;
+
+pub mod matrix;
+pub use matrix::*;
