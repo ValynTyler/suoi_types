@@ -32,7 +32,10 @@ impl Vector for Vector2 {
     }
 
     fn list(&self) -> Vec<f32> {
-        todo!()
+        vec![
+            self.x,
+            self.y,
+        ]
     }
 }
 
