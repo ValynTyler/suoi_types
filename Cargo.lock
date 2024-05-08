@@ -3,12 +3,5 @@
 version = 3
 
 [[package]]
-name = "nerd"
-version = "0.1.0"
-
-[[package]]
 name = "suoi_types"
 version = "0.1.0"
-dependencies = [
- "nerd",
-]

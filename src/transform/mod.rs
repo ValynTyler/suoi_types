@@ -1,7 +1,6 @@
-use nerd::vector::Vector3;
-
 use crate::{Deg, Matrix, Quaternion};
 use crate::Matrix4;
+use crate::Vector3;
 
 pub struct Transform {
     position: Vector3,
@@ -11,8 +10,8 @@ pub struct Transform {
 impl Default for Transform {
     fn default() -> Self {
         Self {
-            position: Vector3::ZERO,
-            rotation: Quaternion::axis_angle(Vector3::UP, Deg(0.0)),
+            position: Default::default(),
+            rotation: Quaternion::axis_angle(Vector3::up(), Deg(0.0)),
         }
     }
 }

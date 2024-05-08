@@ -1,8 +1,8 @@
 use std::{fmt::Display, ops::Mul};
 
-use nerd::vector::Vector3;
-
 use crate::Matrix;
+use crate::Vector;
+use crate::Vector3;
 
 #[allow(unused)]
 #[rustfmt::skip]

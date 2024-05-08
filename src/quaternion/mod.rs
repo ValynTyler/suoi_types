@@ -3,10 +3,9 @@ use std::{
     ops::{Add, Mul},
 };
 
-use nerd::vector::Vector3;
-
 use crate::Angle;
 use crate::Matrix4;
+use crate::Vector3;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Quaternion {
@@ -155,17 +154,5 @@ impl Display for Quaternion {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "({}, {}, {}, {})", self.a, self.b, self.c, self.d)?;
         Ok(())
-    }
-}
-
-// Outside implementations
-pub trait Rotate {
-    fn rotate(&mut self, rotation: Quaternion) -> Self;
-}
-
-impl Rotate for Vector3 {
-    fn rotate(&mut self, rotation: Quaternion) -> Self {
-        let q = rotation;
-        (Quaternion::from(q * Vector3::FORWARD) * q.recip()).into()
     }
 }

@@ -1,5 +1,4 @@
-use nerd::vector::{Vector, Vector3};
-use suoi_types::{Angle, Deg, Matrix, Matrix4, Quaternion, Rotate};
+use suoi_types::{Angle, Deg, Matrix, Matrix4, Quaternion, Vector3, Vector};
 
 #[test]
 fn empty() {
@@ -23,13 +22,13 @@ fn rotate_30() {
 
 #[test]
 fn angle_axis_90() {
-    let q = Quaternion::axis_angle(Vector3::UP, Deg(90.));
+    let q = Quaternion::axis_angle(Vector3::up(), Deg(90.));
     assert_eq!(q, Quaternion::new(0.70710677, 0.0, 0.70710677, 0.0));
 }
 
 #[test]
 fn recip_90() {
-    let q = Quaternion::axis_angle(Vector3::UP, Deg(90.));
+    let q = Quaternion::axis_angle(Vector3::up(), Deg(90.));
     assert_eq!(
         q.recip(),
         Quaternion::new(0.7071068, -0.0, -0.7071068, -0.0)
@@ -39,7 +38,7 @@ fn recip_90() {
 #[test]
 #[rustfmt::skip]
 fn mat_45() {
-    let q = Quaternion::axis_angle(Vector3::UP, Deg(45.));
+    let q = Quaternion::axis_angle(Vector3::up(), Deg(45.));
 
     assert_eq!(q.mat(), Matrix4(
         [ 0.7071067, 0.0, 0.7071068, 0.0],
@@ -52,7 +51,7 @@ fn mat_45() {
 #[test]
 #[rustfmt::skip]
 fn mat_60() {
-    let q = Quaternion::axis_angle(Vector3::UP, Deg(60.));
+    let q = Quaternion::axis_angle(Vector3::up(), Deg(60.));
 
     assert_eq!(q.mat(), Matrix4(
         [ 0.5,           0.0, 0.8660254, 0.0],
@@ -64,7 +63,7 @@ fn mat_60() {
 
 #[test]
 fn fwd_column() {
-    let q = Quaternion::axis_angle(Vector3::UP, Deg(10.));
+    let q = Quaternion::axis_angle(Vector3::up(), Deg(10.));
 
     let mat = q.mat();
     let fwd = Vector3 {
@@ -75,5 +74,5 @@ fn fwd_column() {
 
     println!("{}", fwd);
 
-    assert!((fwd - Vector3::FORWARD.to_owned().rotate(q)).len() < 0.0001);
+    assert!((fwd - Vector3::fwd().to_owned().rotate(q)).len() < 0.0001);
 }
