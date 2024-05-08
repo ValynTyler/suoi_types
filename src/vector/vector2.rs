@@ -2,7 +2,7 @@ use std::ops::Sub;
 
 use crate::Vector;
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Vector2 {
     pub x: f32,
     pub y: f32,

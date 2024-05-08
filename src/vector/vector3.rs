@@ -5,7 +5,7 @@ use std::{
 
 use crate::{Quaternion, Vector};
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
