@@ -92,6 +92,12 @@ impl Matrix for Matrix4 {
             }
         }
     }
+    
+    fn transposition(&self) -> Self {
+        let mut clone = self.clone();
+        clone.transpose();
+        clone
+    }
 }
 
 // Arithmetic
@@ -159,5 +165,23 @@ impl Matrix4 {
            [ r.z,  u.z,  f.z, 0.],
            [-t.x, -t.y, -t.z, 1.],
        )
+    }
+
+    #[rustfmt::skip]
+    pub fn perspective(
+        fovy_deg: f32,
+        aspect: f32,
+        near: f32,
+        far: f32,
+
+    ) -> Self {
+        let f = (fovy_deg.to_radians() / 2.0).tan().recip();
+        
+        Self(
+            [f / aspect, 0.0,  0.0,                         0.0                                 ],
+            [0.0,        f,    0.0,                         0.0                                 ],
+            [0.0,        0.0,  (far + near) / (near - far), (2.0 * far * near) / (near - far)   ],
+            [0.0,        0.0, -1.0,                         0.0                                 ],
+        )
     }
 }

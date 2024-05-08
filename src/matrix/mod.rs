@@ -14,4 +14,5 @@ pub trait Matrix {
     fn identity() -> Self;
 
     fn transpose(&mut self);
+    fn transposition(&self) -> Self;
 }
