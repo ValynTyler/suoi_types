@@ -12,3 +12,6 @@ pub use matrix::*;
 
 pub mod vector;
 pub use vector::*;
+
+pub mod color;
+pub use color::*;

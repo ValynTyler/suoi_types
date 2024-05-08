@@ -107,6 +107,14 @@ impl Vector3 {
         Self { x, y, z }
     }
 
+    pub fn right() -> Self {
+        Self {
+            x: 1.,
+            y: 0.,
+            z: 0.,
+        }
+    }
+
     pub fn up() -> Self {
         Self {
             x: 0.,
