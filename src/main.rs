@@ -1,7 +1,13 @@
-use suoi_types::Matrix4;
-use suoi_types::Matrix;
+use suoi_types::{Matrix, Matrix4};
 
 fn main() {
-    let m = Matrix4::identity();
+    let mut m = Matrix4(
+        [1., 0., 0., 0.],
+        [0., 1., 0., 0.],
+        [0., 0., 1., 0.],
+        [1., 1., 0., 1.],
+    );
+    m.transpose();
+    m.set(0, 1, 69.0);
     println!("{}", m);
 }
