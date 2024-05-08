@@ -6,7 +6,7 @@ use crate::Matrix;
 
 #[allow(unused)]
 #[rustfmt::skip]
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Matrix4(
     pub[f32; 4],
     pub[f32; 4],
@@ -74,12 +74,11 @@ impl Matrix for Matrix4 {
     fn transpose(&mut self) {
         let size = self::Matrix4::size();
         for i in 0..size {
-            for j in 0..size {
-                let p = self.get(i, j);
-                let q = self.get(j, i);
+            for j in i..size {
+                let aux = self.get(i, j);
 
-                self.set(i, j, p);///
-                self.set(j, i, q);
+                self.set(i, j, self.get(j, i));
+                self.set(j, i, aux);
             }
         }
     }
