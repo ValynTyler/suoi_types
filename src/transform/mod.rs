@@ -1,6 +1,7 @@
-use nerd::{matrix::{Matrix, Matrix4}, vector::Vector3};
+use nerd::vector::Vector3;
 
-use crate::{Deg, Quaternion};
+use crate::{Deg, Matrix, Quaternion};
+use crate::Matrix4;
 
 pub struct Transform {
     position: Vector3,
@@ -18,7 +19,7 @@ impl Default for Transform {
 
 impl Into<Matrix4> for Transform {
     fn into(self) -> Matrix4 {
-        Matrix4::from_translation(self.position) * self.rotation.mat()
+        self.mat()
     }
 }
 
@@ -56,6 +57,10 @@ impl Transform {
             y: mat.get(2, 2),
             z: mat.get(3, 2),
         }
+    }
+
+    pub fn mat(&self) -> Matrix4 {
+        &Matrix4::translate(self.position) * &self.rotation.mat()
     }
 
     pub fn translate(&mut self, translation: Vector3) {

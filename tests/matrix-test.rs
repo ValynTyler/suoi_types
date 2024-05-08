@@ -31,3 +31,10 @@ fn transpose() {
     m.transpose();
     assert_eq!(n, m);
 }
+
+#[test]
+fn identity_squared() {
+    let mat = Matrix4::identity();
+
+    assert_eq!(mat, &mat * &mat);
+}

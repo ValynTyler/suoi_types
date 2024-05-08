@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, ops::Mul};
 
 use nerd::vector::Vector3;
 
@@ -23,12 +23,22 @@ impl Default for Matrix4 {
 
 // Matrix
 impl Matrix for Matrix4 {
+    fn zero() -> Self {
+        // TODO: mactro-ize
+        Self(
+            [0., 0., 0., 0.],
+            [0., 0., 0., 0.],
+            [0., 0., 0., 0.],
+            [0., 0., 0., 0.],
+        )
+    }
+
     fn identity() -> Self {
         // TODO: mactro-ize
         Self(
             [1., 0., 0., 0.],
             [0., 1., 0., 0.],
-            [0., 0., 1., 1.],
+            [0., 0., 1., 0.],
             [0., 0., 0., 1.],
         )
     }
@@ -38,21 +48,21 @@ impl Matrix for Matrix4 {
     }
 
     fn get(&self, i: usize, j: usize) -> f32 {
-        match j {
-            0 => self.0[i],
-            1 => self.1[i],
-            2 => self.2[i],
-            3 => self.3[i],
+        match i {
+            0 => self.0[j],
+            1 => self.1[j],
+            2 => self.2[j],
+            3 => self.3[j],
             _ => panic!(),
         }
     }
 
     fn set(&mut self, i: usize, j: usize, value: f32) {
-        match j {
-            0 => self.0[i] = value,
-            1 => self.1[i] = value,
-            2 => self.2[i] = value,
-            3 => self.3[i] = value,
+        match i {
+            0 => self.0[j] = value,
+            1 => self.1[j] = value,
+            2 => self.2[j] = value,
+            3 => self.3[j] = value,
             _ => panic!(),
         }
     }
@@ -84,6 +94,32 @@ impl Matrix for Matrix4 {
     }
 }
 
+// Arithmetic
+impl Mul<&Matrix4> for &Matrix4 {
+    type Output = Matrix4;
+
+    fn mul(self, rhs: &Matrix4) -> Self::Output {
+        let size = Matrix4::size();
+
+        let a = self;
+        let b = rhs;
+
+        let mut mat = Matrix4::zero();
+
+        for i in 0..size {
+            for j in 0..size {
+                let mut s = 0.0;
+                for k in 0..size {
+                    s += a.get(i, k) * b.get(k, j);
+                }
+                mat.set(i, j, s);
+            }
+        }
+
+        mat
+    }
+}
+
 // Display
 impl Display for Matrix4 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -97,6 +133,14 @@ impl Display for Matrix4 {
 
 // Methods
 impl Matrix4 {
+    pub fn translate(translation: Vector3) -> Matrix4 {
+        let mut m = Matrix4::identity();
+        m.set(4, 1, translation.x);
+        m.set(4, 2, translation.y);
+        m.set(4, 3, translation.z);
+        m
+    }
+
     #[rustfmt::skip]
     pub fn look_at(up: Vector3, right: Vector3, forward: Vector3, position: Vector3) -> Matrix4 {
         let u = up;
