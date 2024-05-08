@@ -98,6 +98,11 @@ impl Matrix for Matrix4 {
         clone.transpose();
         clone
     }
+    
+    fn ptr(&self) -> *const f32 {
+                ///
+        &self.0[0]
+    }
 }
 
 // Arithmetic
