@@ -1,6 +1,6 @@
 use std::{
     fmt::Display,
-    ops::{Add, AddAssign, Mul, Sub},
+    ops::{Add, AddAssign, Mul, Neg, Sub},
 };
 
 use crate::{Quaternion, Vector};
@@ -51,6 +51,18 @@ impl Vector for Vector3 {
 }
 
 // Arithmetic
+impl Neg for Vector3 {
+    type Output = Self;
+
+    fn neg(self) -> Self::Output {
+        Self {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
+        }
+    }
+}
+
 impl Add for Vector3 {
     type Output = Self;
 
