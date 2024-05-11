@@ -48,6 +48,16 @@ impl Vector for Vector3 {
     fn list(&self) -> Vec<f32> {
         vec![self.x, self.y, self.z]
     }
+    
+    fn normalized(&mut self) -> Self {
+        *self = Self {
+            x: self.x * 1.0/self.len(),
+            y: self.y * 1.0/self.len(),
+            z: self.z * 1.0/self.len(),
+        };
+
+        *self
+    }
 }
 
 // Arithmetic

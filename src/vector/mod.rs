@@ -9,4 +9,5 @@ pub trait Vector {
     fn dot(&self, rhs: Self) -> f32;
     fn len(&self) -> f32;
     fn list(&self) -> Vec<f32>;
+    fn normalized(&mut self) -> Self;
 }
