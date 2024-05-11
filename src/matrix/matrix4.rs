@@ -154,6 +154,17 @@ impl Matrix4 {
     }
 
     #[rustfmt::skip]
+    pub fn look_at(fwd: Vector3, up: Vector3, right: Vector3, eye: Vector3) -> Matrix4 {
+        let (r, u, f, t) = (right, up, fwd, eye);
+        Matrix4(
+            [r.x, r.y, r.z, t.x],
+            [u.x, u.y, u.z, t.y],
+            [f.x, f.y, f.z, t.z],
+            [0.0, 0.0, 0.0, 1.0],
+        )
+    }
+
+    #[rustfmt::skip]
     pub fn perspective(
         fovy_deg: f32,
         aspect: f32,

@@ -143,6 +143,18 @@ impl Vector3 {
         }
     }
 
+    pub fn cross(self, rhs: Vector3) -> Vector3 {
+        Vector3::new(
+            self.y * rhs.z - self.z * rhs.y,
+            self.z * rhs.x - self.x * rhs.z,
+            self.x * rhs.y - self.y * rhs.x,
+        )
+    }
+
+    pub fn angle(&self, other: Vector3) -> f32 {
+        f32::acos((self.dot(other)) / (self.len() * other.len()))
+    }
+
     pub fn rotate(&mut self, rotation: Quaternion) -> Self {
         let q = rotation;
         (Quaternion::from(q * Vector3::fwd()) * q.recip()).into()
