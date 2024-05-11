@@ -49,14 +49,12 @@ impl Vector for Vector3 {
         vec![self.x, self.y, self.z]
     }
     
-    fn normalized(&mut self) -> Self {
-        *self = Self {
+    fn unit(&self) -> Self {
+        Self {
             x: self.x * 1.0/self.len(),
             y: self.y * 1.0/self.len(),
             z: self.z * 1.0/self.len(),
-        };
-
-        *self
+        }
     }
 }
 

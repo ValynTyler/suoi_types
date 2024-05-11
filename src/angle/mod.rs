@@ -1,7 +1,7 @@
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Rad(pub f32);
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy)]
 pub struct Deg(pub f32);
 
 impl Into<Deg> for Rad {
