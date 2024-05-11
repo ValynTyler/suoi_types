@@ -17,10 +17,7 @@ impl Default for Vector2 {
 // Vector
 impl Vector for Vector2 {
     fn zero() -> Self {
-        Self {
-            x: 0.,
-            y: 0.,
-        }
+        Self { x: 0., y: 0. }
     }
 
     fn dot(&self, _rhs: Self) -> f32 {
@@ -32,10 +29,7 @@ impl Vector for Vector2 {
     }
 
     fn list(&self) -> Vec<f32> {
-        vec![
-            self.x,
-            self.y,
-        ]
+        vec![self.x, self.y]
     }
 }
 
@@ -48,5 +42,12 @@ impl Sub for Vector2 {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
         }
+    }
+}
+
+// Methods
+impl Vector2 {
+    pub fn new(x: f32, y: f32) -> Self {
+        Self { x, y }
     }
 }
