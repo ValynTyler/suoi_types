@@ -2,6 +2,7 @@ use std::{fmt::Display, ops::Mul};
 
 use crate::Matrix;
 use crate::OutOfBoundsError;
+use crate::Vector;
 use crate::Vector3;
 
 #[allow(unused)]
@@ -162,6 +163,21 @@ impl Matrix4 {
             [f.x, f.y, f.z, t.z],
             [0.0, 0.0, 0.0, 1.0],
         )
+    }
+
+    #[rustfmt::skip]
+    pub fn look_at_dir(eye: Vector3, dir: Vector3, up: Vector3) -> Matrix4 {
+        let f = dir.unit();
+        let r = f.cross(up).unit();
+        let u = r.cross(f);
+
+        Matrix4(
+            [ r.x.clone(), u.x.clone(), -f.x.clone(), 0.0],
+            [ r.y.clone(), u.y.clone(), -f.y.clone(), 0.0],
+            [ r.z.clone(), u.z.clone(), -f.z.clone(), 0.0],
+            [-eye.dot(r), -eye.dot(u),   eye.dot(f),  1.0],
+        )
+        // .transposition()
     }
 
     #[rustfmt::skip]
