@@ -133,6 +133,38 @@ impl Mul<&Matrix4> for &Matrix4 {
     }
 }
 
+impl Mul<Vector3> for &Matrix4 {
+    type Output = Vector3;
+
+    fn mul(self, rhs: Vector3) -> Self::Output {
+        let size = Matrix4::size();
+
+        let a = self;
+        let b = [
+            rhs.x,
+            rhs.y,
+            rhs.z,
+            1.0,
+        ];
+
+        let mut out = [0.0; 4];
+
+        for i in 0..size {
+            let mut s = 0.0;
+            for k in 0..size {
+                s += a.get(i, k).unwrap() * b.get(k).unwrap();
+            }
+            out[i] = s;
+        }
+
+        Vector3 {
+            x: out[0],
+            y: out[1],
+            z: out[2],
+        }
+    }
+}
+
 // Display
 impl Display for Matrix4 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

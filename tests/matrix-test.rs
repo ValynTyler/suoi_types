@@ -1,4 +1,4 @@
-use suoi_types::{Matrix, Matrix4};
+use suoi_types::{Matrix, Matrix4, Vector3};
 
 #[test]
 fn get_set() {
@@ -37,4 +37,15 @@ fn identity_squared() {
     let mat = Matrix4::identity();
 
     assert_eq!(mat, &mat * &mat);
+}
+
+#[test]
+fn scale_vector() {
+    let v = Vector3 {
+        x: 3.,
+        y: 4.,
+        z: 5.,
+    };
+
+    assert_eq!(Vector3::new(30.0, 40.0, 50.0), &Matrix4::uniform_scale(10.0) * v);
 }
