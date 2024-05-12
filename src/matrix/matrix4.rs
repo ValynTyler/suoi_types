@@ -146,7 +146,7 @@ impl Display for Matrix4 {
 
 // Methods
 impl Matrix4 {
-    pub fn translate(translation: Vector3) -> Matrix4 {
+    pub fn translate(translation: Vector3) -> Self {
         let mut m = Matrix4::identity();
         m.set(0, 3, translation.x).unwrap();
         m.set(1, 3, translation.y).unwrap();
@@ -154,8 +154,17 @@ impl Matrix4 {
         m
     }
 
+    pub fn uniform_scale(scale: f32) -> Self {
+        let mut mat = Matrix4::identity();
+        mat.set(0, 0, scale).unwrap();
+        mat.set(1, 1, scale).unwrap();
+        mat.set(2, 2, scale).unwrap();
+        mat.set(2, 2, scale).unwrap();
+        mat
+    }
+
     #[rustfmt::skip]
-    pub fn look_at(fwd: Vector3, up: Vector3, right: Vector3, eye: Vector3) -> Matrix4 {
+    pub fn look_at(fwd: Vector3, up: Vector3, right: Vector3, eye: Vector3) -> Self {
         let (r, u, f, t) = (right, up, fwd, eye);
         Matrix4(
             [r.x, r.y, r.z, t.x],
@@ -166,7 +175,7 @@ impl Matrix4 {
     }
 
     #[rustfmt::skip]
-    pub fn look_at_dir(eye: Vector3, dir: Vector3, up: Vector3) -> Matrix4 {
+    pub fn look_at_dir(eye: Vector3, dir: Vector3, up: Vector3) -> Self {
         let f = dir.unit();
         let r = f.cross(up).unit();
         let u = r.cross(f);
