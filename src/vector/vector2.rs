@@ -20,6 +20,13 @@ impl Vector for Vector2 {
         Self { x: 0., y: 0. }
     }
 
+    fn one() -> Self {
+        Self {
+            x: 1.,
+            y: 1.,
+        }
+    }
+
     fn dot(&self, _rhs: Self) -> f32 {
         todo!()
     }

@@ -3,7 +3,7 @@ use std::{
     ops::{Add, AddAssign, Mul, Neg, Sub},
 };
 
-use crate::{Quaternion, Vector};
+use crate::{Quaternion, Vector, Vector2};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vector3 {
@@ -33,6 +33,14 @@ impl Vector for Vector3 {
         }
     }
 
+    fn one() -> Self {
+        Self {
+            x: 1.,
+            y: 1.,
+            z: 1.,
+        }
+    }
+
     fn len(&self) -> f32 {
         let mut s = 0.0;
         for elem in self.list() {
@@ -48,12 +56,12 @@ impl Vector for Vector3 {
     fn list(&self) -> Vec<f32> {
         vec![self.x, self.y, self.z]
     }
-    
+
     fn unit(&self) -> Self {
         Self {
-            x: self.x * 1.0/self.len(),
-            y: self.y * 1.0/self.len(),
-            z: self.z * 1.0/self.len(),
+            x: self.x * 1.0 / self.len(),
+            y: self.y * 1.0 / self.len(),
+            z: self.z * 1.0 / self.len(),
         }
     }
 }
@@ -166,5 +174,26 @@ impl Vector3 {
     pub fn rotate(&mut self, rotation: Quaternion) -> Self {
         let q = rotation;
         (Quaternion::from(q * Vector3::fwd()) * q.recip()).into()
+    }
+
+    pub fn xy(&self) -> Vector2 {
+        Vector2 {
+            x: self.x,
+            y: self.y,
+        }
+    }
+
+    pub fn xz(&self) -> Vector2 {
+        Vector2 {
+            x: self.x,
+            y: self.z,
+        }
+    }
+
+    pub fn yz(&self) -> Vector2 {
+        Vector2 {
+            x: self.y,
+            y: self.z,
+        }
     }
 }
