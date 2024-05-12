@@ -66,6 +66,10 @@ impl Transform {
         self.position += translation;
     }
     
+    pub fn set_position(&mut self, position: Vector3) {
+        self.position = position;
+    }
+    
     pub fn set_rotation(&mut self, rotation: Quaternion) {
         self.rotation = rotation;
     }
