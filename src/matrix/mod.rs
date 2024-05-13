@@ -1,3 +1,9 @@
+pub mod matrix2;
+pub use matrix2::*;
+
+pub mod matrix3;
+pub use matrix3::*;
+
 pub mod matrix4;
 pub use matrix4::*;
 

@@ -1,5 +1,4 @@
 use suoi_types::Matrix4;
-use suoi_types::Matrix;
 
 fn main() {
     let m = Matrix4(
@@ -9,5 +8,5 @@ fn main() {
         [8., 1., 2., 4.],
     );
 
-    println!("{}", m.inverse());
+    println!("{}", m.minor(3, 1));
 }

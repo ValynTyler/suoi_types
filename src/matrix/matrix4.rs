@@ -1,7 +1,7 @@
-use std::ops::Index;
 use std::{fmt::Display, ops::Mul};
 
 use crate::Matrix;
+use crate::Matrix3;
 use crate::OutOfBoundsError;
 use crate::Vector;
 use crate::Vector3;
@@ -184,79 +184,11 @@ impl Matrix for Matrix4 {
     }
     
     fn inverse(&self) -> Self {
-        let mut mat = self.clone();
+        let mat = self.clone();
 
-        gauss_jordan_elim(&mut mat);
+
 
         mat
-    }
-}
-
-fn is_zeroes(row: &[f32; 4]) -> bool {
-    for elem in row {
-        if *elem != 0.0 {
-            return false
-        }
-    }
-    return true
-}
-
-fn pivot_index(row: &[f32; 4]) -> Option<usize> {
-    for i in 0..Matrix4::size() {
-        if row[i] != 0.0 {
-            return Some(i)
-        }
-    }
-    None
-}
-
-fn order_rows(mat: &mut Matrix4) {
-    for k in 0..4 {
-        let mut max = 0.0;
-        let mut index: Option<usize> = None;
-
-        for i in 0..4 {
-            if mat.row(i)[k] > max {
-
-                max = mat.row(i)[k];
-                index = Some(i)
-            }
-        }
-
-        match index {
-            None => (),
-            Some(index) => {
-                mat.swap_rows(0, index);
-                return
-            },
-        }
-    }
-}
-
-fn gauss_jordan_elim(mat: &mut Matrix4) {
-    // step 1: boil zeroes to bottom
-    for a in 0..4 {
-        for b in a..4 {
-            if is_zeroes(mat.row(a)) && !is_zeroes(mat.row(b)) {
-                mat.swap_rows(a, b);
-            }
-        }
-    }
-
-    // step 2: rearrange rows
-    order_rows(mat);
-
-    // step 3: normalize top row first elem
-    match pivot_index(mat.row(0)) {
-        None => (),
-        Some(index) => {
-            mat.mul_row(0, 1.0/mat.row(0)[index]);
-
-            // step 4: make all other column values 0
-            for k in 1..4 {
-                mat.add_row_mul(0, k, -mat.row(k)[index])
-            } 
-        }
     }
 }
 
@@ -331,6 +263,32 @@ impl Display for Matrix4 {
 
 // Methods
 impl Matrix4 {
+    pub fn minor(&self, i: usize, j: usize) -> Matrix3 {
+        let mut mat = Matrix3(
+            [0.0; 3],
+            [0.0; 3],
+            [0.0; 3],
+        );
+
+        for x in 0..3 {
+            for y in 0..3 {
+                let p = match y < i {
+                    true => 0,
+                    false => 1,
+                };
+
+                let q = match x < j {
+                    true => 0,
+                    false => 1,
+                };
+
+                mat.row_mut(x)[y] = self.row(x + q)[y + p]
+            }
+        }
+        
+        mat
+    }
+
     pub fn translate(translation: Vector3) -> Self {
         let mut m = Matrix4::identity();
         m.set(0, 3, translation.x).unwrap();
