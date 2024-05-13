@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+use std::{fmt::Display, ops::{Add, Sub}};
 
 use crate::Vector;
 
@@ -67,6 +67,13 @@ impl Sub for Vector2 {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
         }
+    }
+}
+
+// Display
+impl Display for Vector2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[{}, {}]", self.x, self.y)
     }
 }
 
