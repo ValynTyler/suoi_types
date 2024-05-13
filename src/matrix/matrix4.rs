@@ -240,6 +240,24 @@ impl Matrix4 {
     }
 
     #[rustfmt::skip]
+    pub fn inverse_perspective(fovy_deg: f32, aspect: f32, near: f32, far: f32) -> Self {
+        let f = (fovy_deg.to_radians() / 2.0).tan().recip();
+        
+        let a = f / aspect;
+        let b = f;
+        let c = (far + near) / (near - far);
+        let d = (2.0 * far * near) / (near - far);
+        let e = -1.0;
+
+        Self(
+            [1.0 / a,   0.0,        0.0,        0.0],
+            [0.0,       1.0 / b,    0.0,        0.0],
+            [0.0,       0.0,        0.0,        1.0 / e],
+            [0.0,       0.0,        1.0 / d,    (-c)/(d*e)],
+        )
+    }
+
+    #[rustfmt::skip]
     pub fn ortho(
         left: f32,
         right: f32,
