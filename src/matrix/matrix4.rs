@@ -177,6 +177,19 @@ impl Matrix for Matrix4 {
             *elem *= coef;
         }
     }
+    
+    fn add_row_mul(&mut self, i_from: usize, i_to: usize, coef: f32) {
+        let mut from_row = self.row(i_from).clone();
+        let to_row = self.row_mut(i_to);
+
+        for elem in &mut from_row {
+            *elem *= coef;
+        }
+
+        for i in 0..Self::size() {
+            to_row[i] += from_row[i];
+        }
+    }
 }
 
 // Arithmetic

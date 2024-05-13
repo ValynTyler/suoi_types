@@ -23,6 +23,7 @@ pub trait Matrix {
 
     fn swap_rows(&mut self, i1: usize, i2: usize);
     fn mul_row(&mut self, i: usize, coef: f32);
+    fn add_row_mul(&mut self, i_from: usize, i_to: usize, coef: f32);
 
     fn zero() -> Self;
     fn identity() -> Self;
