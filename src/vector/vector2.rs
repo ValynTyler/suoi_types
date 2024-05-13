@@ -1,8 +1,8 @@
-use std::ops::Sub;
+use std::ops::{Add, Sub};
 
 use crate::Vector;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vector2 {
     pub x: f32,
     pub y: f32,
@@ -48,6 +48,17 @@ impl Vector for Vector2 {
 }
 
 // Arithmetic
+impl Add for Vector2 {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
+}
+
 impl Sub for Vector2 {
     type Output = Self;
 

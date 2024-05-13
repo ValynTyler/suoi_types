@@ -191,7 +191,14 @@ impl Matrix4 {
         mat.set(0, 0, scale).unwrap();
         mat.set(1, 1, scale).unwrap();
         mat.set(2, 2, scale).unwrap();
-        mat.set(2, 2, scale).unwrap();
+        mat
+    }
+
+    pub fn scale(scale: Vector3) -> Self {
+        let mut mat = Matrix4::identity();
+        mat.set(0, 0, scale.x).unwrap();
+        mat.set(1, 1, scale.y).unwrap();
+        mat.set(2, 2, scale.z).unwrap();
         mat
     }
 
