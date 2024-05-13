@@ -78,8 +78,8 @@ impl Matrix for Matrix4 {
         Ok(())
     }
 
-    fn row(&self, j: usize) -> &[f32; 4] {
-        match j {
+    fn row(&self, i: usize) -> &[f32; 4] {
+        match i {
             0 => &self.0,
             1 => &self.1,
             2 => &self.2,
@@ -87,13 +87,23 @@ impl Matrix for Matrix4 {
             _ => panic!(),
         }
     }
+    
+    fn row_mut(&mut self, i: usize) -> &mut [f32; 4] {
+        match i {
+            0 => &mut self.0,
+            1 => &mut self.1,
+            2 => &mut self.2,
+            3 => &mut self.3,
+            _ => panic!(),
+        }
+    }
 
-    fn column(&self, i: usize) -> Vec<f32> {
+    fn column(&self, j: usize) -> Vec<f32> {
         vec![
-            self.get(i, 0).unwrap(),
-            self.get(i, 1).unwrap(),
-            self.get(i, 2).unwrap(),
-            self.get(i, 3).unwrap(),
+            self.get(0, j).unwrap(),
+            self.get(1, j).unwrap(),
+            self.get(2, j).unwrap(),
+            self.get(3, j).unwrap(),
         ]
     }
 
@@ -159,6 +169,12 @@ impl Matrix for Matrix4 {
             2 => self.2 = aux,
             3 => self.3 = aux,
             _ => panic!(),
+        }
+    }
+    
+    fn mul_row(&mut self, i: usize, coef: f32) {
+        for elem in self.row_mut(i) {
+            *elem *= coef;
         }
     }
 }
