@@ -5,7 +5,7 @@ use std::{
 
 use crate::{Quaternion, Vector, Vector2};
 
-#[derive(Debug, Clone, Copy,PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
@@ -124,8 +124,15 @@ impl Mul<f32> for Vector3 {
 // Display
 impl Display for Vector3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[{}, {}, {}]", self.x, self.y, self.z)?;
-        Ok(())
+        if let Some(precision) = f.precision() {
+            write!(
+                f,
+                "[{:.*}, {:.*}, {:.*}]",
+                precision, self.x, precision, self.y, precision, self.z
+            )
+        } else {
+            write!(f, "[{}, {}, {}]", self.x, self.y, self.z)
+        }
     }
 }
 

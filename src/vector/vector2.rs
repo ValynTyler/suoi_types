@@ -1,4 +1,7 @@
-use std::{fmt::Display, ops::{Add, Sub}};
+use std::{
+    fmt::Display,
+    ops::{Add, Sub},
+};
 
 use crate::Vector;
 
@@ -21,10 +24,7 @@ impl Vector for Vector2 {
     }
 
     fn one() -> Self {
-        Self {
-            x: 1.,
-            y: 1.,
-        }
+        Self { x: 1., y: 1. }
     }
 
     fn dot(&self, _rhs: Self) -> f32 {
@@ -38,11 +38,11 @@ impl Vector for Vector2 {
     fn list(&self) -> Vec<f32> {
         vec![self.x, self.y]
     }
-    
+
     fn unit(&self) -> Self {
         Self {
-            x: self.x * 1.0/self.len(),
-            y: self.y * 1.0/self.len(),
+            x: self.x * 1.0 / self.len(),
+            y: self.y * 1.0 / self.len(),
         }
     }
 }
@@ -73,7 +73,11 @@ impl Sub for Vector2 {
 // Display
 impl Display for Vector2 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[{}, {}]", self.x, self.y)
+        if let Some(precision) = f.precision() {
+            write!(f, "[{:.*}, {:.*}]", precision, self.x, precision, self.y)
+        } else {
+            write!(f, "[{}, {}]", self.x, self.y)
+        }
     }
 }
 
