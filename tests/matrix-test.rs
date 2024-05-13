@@ -42,5 +42,30 @@ fn scale_vector() {
         z: 5.,
     };
 
-    assert_eq!(Vector3::new(30.0, 40.0, 50.0), &Matrix4::uniform_scale(10.0) * v);
+    assert_eq!(
+        Vector3::new(30.0, 40.0, 50.0),
+        &Matrix4::uniform_scale(10.0) * v
+    );
+}
+
+#[test]
+fn row_swap() {
+    let mut m = Matrix4(
+        [1., 0., 0., 3.],
+        [0., 1., 0., 2.],
+        [0., 0., 1., 2.],
+        [0., 0., 0., 1.],
+    );
+
+    m.swap_rows(0, 2);
+
+    assert_eq!(
+        m,
+        Matrix4(
+            [0.0, 0.0, 1.0, 2.0],
+            [0.0, 1.0, 0.0, 2.0],
+            [1.0, 0.0, 0.0, 3.0],
+            [0.0, 0.0, 0.0, 1.0],
+        )
+    );
 }

@@ -78,12 +78,12 @@ impl Matrix for Matrix4 {
         Ok(())
     }
 
-    fn row(&self, j: usize) -> Vec<f32> {
+    fn row(&self, j: usize) -> &[f32; 4] {
         match j {
-            0 => self.0.to_vec(),
-            1 => self.1.to_vec(),
-            2 => self.2.to_vec(),
-            3 => self.3.to_vec(),
+            0 => &self.0,
+            1 => &self.1,
+            2 => &self.2,
+            3 => &self.3,
             _ => panic!(),
         }
     }
@@ -112,31 +112,12 @@ impl Matrix for Matrix4 {
     }
     
     fn inverse(&self) -> Self {
-        fn _pivot(row: &[f32]) -> Option<f32> {
-            for elem in row {
-                if *elem != 0.0 {
-                    return Some(*elem)
-                }
-            }
-            None
-        }
-
-        fn _r_echelon(_mat: &Matrix4) -> Matrix4 {
-            todo!()
-        }
         
-        fn _rr_echelon(_mat: &Matrix4) -> Matrix4 {
-            todo!()
-        }
         
 
 
 
-        let matrix = self.clone();
-
-
-
-        matrix
+        todo!()
     }
     
     fn ptr(&self) -> *const f32 {
@@ -145,10 +126,10 @@ impl Matrix for Matrix4 {
     
     fn rows(&self) -> Vec<Vec<f32>> {
         vec![
-            self.row(0),
-            self.row(1),
-            self.row(2),
-            self.row(3),
+            self.row(0).to_vec(),
+            self.row(1).to_vec(),
+            self.row(2).to_vec(),
+            self.row(3).to_vec(),
         ]
     }
     
@@ -160,27 +141,26 @@ impl Matrix for Matrix4 {
             self.column(3),
         ]
     }
-}
+    
+    fn swap_rows(&mut self, i1: usize, i2: usize) {
+        let aux = self.row(i1).clone();
+        
+        match i1 {
+            0 => self.0 = *self.row(i2),
+            1 => self.1 = *self.row(i2),
+            2 => self.2 = *self.row(i2),
+            3 => self.3 = *self.row(i2),
+            _ => panic!(),
+        }
 
-pub fn pivot_col_index(_col: &[f32]) -> usize {
-
-    todo!()
-}
-
-pub fn is_row_echelon(mat: &Matrix4) -> bool {
-    for col in mat.columns() {
-        let mut zero_col = true;
-        for elem in col {
-            if zero_col == false && elem != 0.0 {
-                return false;
-            }
-            if elem != 0.0 {
-                zero_col = false;
-            }
+        match i2 {
+            0 => self.0 = aux,
+            1 => self.1 = aux,
+            2 => self.2 = aux,
+            3 => self.3 = aux,
+            _ => panic!(),
         }
     }
-
-    true
 }
 
 // Arithmetic
