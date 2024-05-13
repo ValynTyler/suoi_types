@@ -13,8 +13,11 @@ pub trait Matrix {
 
     fn set(&mut self, i: usize, j: usize, value: f32) -> Result<(), OutOfBoundsError>;
 
-    fn row(&self, j: usize) -> &[f32];
-    fn column(&self, i: usize) -> &[f32];
+    fn row(&self, j: usize) -> Vec<f32>;
+    fn column(&self, i: usize) -> Vec<f32>;
+    
+    fn rows(&self) -> Vec<Vec<f32>>;
+    fn columns(&self) -> Vec<Vec<f32>>;
 
     fn zero() -> Self;
     fn identity() -> Self;

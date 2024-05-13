@@ -1,3 +1,4 @@
+use suoi_types::pivot_col_index;
 use suoi_types::Matrix4;
 use suoi_types::Matrix;
 
@@ -9,5 +10,5 @@ fn main() {
         [0., 0., 0., 1.],
     );
 
-    println!("{}", m.inverse());
+    println!("{}", pivot_col_index(&m.column(3)));
 }

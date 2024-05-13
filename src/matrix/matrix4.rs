@@ -78,18 +78,23 @@ impl Matrix for Matrix4 {
         Ok(())
     }
 
-    fn row(&self, j: usize) -> &[f32] {
+    fn row(&self, j: usize) -> Vec<f32> {
         match j {
-            0 => &self.0,
-            1 => &self.1,
-            2 => &self.2,
-            3 => &self.3,
+            0 => self.0.to_vec(),
+            1 => self.1.to_vec(),
+            2 => self.2.to_vec(),
+            3 => self.3.to_vec(),
             _ => panic!(),
         }
     }
 
-    fn column(&self, _i: usize) -> &[f32] {
-        todo!()
+    fn column(&self, i: usize) -> Vec<f32> {
+        vec![
+            self.get(i, 0).unwrap(),
+            self.get(i, 1).unwrap(),
+            self.get(i, 2).unwrap(),
+            self.get(i, 3).unwrap(),
+        ]
     }
 
     fn transpose(&self) -> Self {
@@ -107,43 +112,29 @@ impl Matrix for Matrix4 {
     }
     
     fn inverse(&self) -> Self {
-        let mut matrix = self.clone();
-
-        let n = Self::size();
-        let m = Self::size();
-
-        for k in 0..std::cmp::min(n, m) {
-            let mut max_row = k;
-            for i in k + 1..n {
-                if matrix.get(i, k).unwrap().abs() > matrix.get(max_row, k).unwrap().abs() {
-                    max_row = i;
+        fn _pivot(row: &[f32]) -> Option<f32> {
+            for elem in row {
+                if *elem != 0.0 {
+                    return Some(*elem)
                 }
             }
-            matrix.0.swap(k, max_row);
-
-            for i in k + 1..n {
-                let factor = matrix.get(i, k).unwrap() / matrix.get(k, k).unwrap();
-                for j in k..m {
-                    *matrix.get_mut(i, j).unwrap() -= factor * *matrix.get_mut(k, j).unwrap();
-                }
-            }
+            None
         }
 
-        for k in (0..std::cmp::min(n, m)).rev() {
-            for i in (0..k).rev() {
-                let factor = matrix.get(i, k).unwrap() / matrix.get(k, k).unwrap();
-                for j in k..m {
-                    *matrix.get_mut(i, j).unwrap() -= factor * *matrix.get_mut(k, j).unwrap();
-                }
-            }
+        fn _r_echelon(_mat: &Matrix4) -> Matrix4 {
+            todo!()
         }
+        
+        fn _rr_echelon(_mat: &Matrix4) -> Matrix4 {
+            todo!()
+        }
+        
 
-        for i in 0..n {
-            let pivot = matrix.get(i, i).unwrap();
-            for j in 0..m {
-                *matrix.get_mut(i, j).unwrap() /= pivot;
-            }
-        }
+
+
+        let matrix = self.clone();
+
+
 
         matrix
     }
@@ -151,6 +142,45 @@ impl Matrix for Matrix4 {
     fn ptr(&self) -> *const f32 {
         &self.0[0]
     }
+    
+    fn rows(&self) -> Vec<Vec<f32>> {
+        vec![
+            self.row(0),
+            self.row(1),
+            self.row(2),
+            self.row(3),
+        ]
+    }
+    
+    fn columns(&self) -> Vec<Vec<f32>> {
+        vec![
+            self.column(0),
+            self.column(1),
+            self.column(2),
+            self.column(3),
+        ]
+    }
+}
+
+pub fn pivot_col_index(_col: &[f32]) -> usize {
+
+    todo!()
+}
+
+pub fn is_row_echelon(mat: &Matrix4) -> bool {
+    for col in mat.columns() {
+        let mut zero_col = true;
+        for elem in col {
+            if zero_col == false && elem != 0.0 {
+                return false;
+            }
+            if elem != 0.0 {
+                zero_col = false;
+            }
+        }
+    }
+
+    true
 }
 
 // Arithmetic
@@ -284,16 +314,27 @@ impl Matrix4 {
     ) -> Self {
         let f = (fovy_deg.to_radians() / 2.0).tan().recip();
         
+        let a = f / aspect;
+        let b = f;
+        let c = (far + near) / (near - far);
+        let d = (2.0 * far * near) / (near - far);
+        let e = -1.0;
+        
         Self(
-            [f / aspect, 0.0,  0.0,                         0.0                                 ],
-            [0.0,        f,    0.0,                         0.0                                 ],
-            [0.0,        0.0,  (far + near) / (near - far), (2.0 * far * near) / (near - far)   ],
-            [0.0,        0.0, -1.0,                         0.0                                 ],
+            [a,   0.0, 0.0, 0.0],
+            [0.0, b,   0.0, 0.0],
+            [0.0, 0.0, c,   d  ],
+            [0.0, 0.0, e,   0.0],
         )
     }
 
     #[rustfmt::skip]
-    pub fn inverse_perspective(fovy_deg: f32, aspect: f32, near: f32, far: f32) -> Self {
+    pub fn inverse_perspective(
+        fovy_deg: f32,
+        aspect: f32,
+        near: f32,
+        far: f32
+    ) -> Self {
         let f = (fovy_deg.to_radians() / 2.0).tan().recip();
         
         let a = f / aspect;
