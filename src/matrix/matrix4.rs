@@ -121,15 +121,6 @@ impl Matrix for Matrix4 {
         mat
     }
     
-    fn inverse(&self) -> Self {
-        
-        
-
-
-
-        todo!()
-    }
-    
     fn ptr(&self) -> *const f32 {
         &self.0[0]
     }
@@ -188,6 +179,80 @@ impl Matrix for Matrix4 {
 
         for i in 0..Self::size() {
             to_row[i] += from_row[i];
+        }
+    }
+    
+    fn inverse(&self) -> Self {
+        let mut mat = self.clone();
+
+        gauss_jordan_elim(&mut mat);
+
+        mat
+    }
+}
+
+fn pivot_index(row: &[f32; 4]) -> Option<usize> {
+    for i in 0..Matrix4::size() {
+        if row[i] != 0.0 {
+            return Some(i)
+        }
+    }
+    None
+}
+
+fn cleared_row(mat: &Matrix4, j: usize) -> bool {
+    for elem in mat.column(j) {
+        if elem != 0.0 && elem != 1.0 {
+            return false
+        }
+    }
+
+    return true
+}
+
+fn sort_matrix(mat: &mut Matrix4) {
+    let mut k = 0;
+    for j in 0..Matrix4::size() {
+        if !cleared_row(mat, j) {
+            k = j;
+        }
+    }
+
+    for a in 0..Matrix4::size() {
+        for b in a..Matrix4::size() {
+            if mat.row(a)[k] < mat.row(b)[k] {
+                mat.swap_rows(a, b);
+            }
+        }
+    }
+}
+
+fn gauss_jordan_elim(mat: &mut Matrix4) {
+    for _ in 0..10 {
+        sort_matrix(mat);
+
+        let mut k = 0;
+        for j in 0..Matrix4::size() {
+            if !cleared_row(mat, j) {
+                k = j;
+                break;
+            }
+        }
+
+        println!("{}", k);
+
+        match pivot_index(mat.row(k)) {
+            Some(index) => {
+                // normalize top row pivot
+                let pivot = mat.row(k)[index];
+                mat.mul_row(k, 1.0/pivot);
+
+                // make index column all zero (except for pivot)
+                for i in (k + 1)..Matrix4::size() {
+                    mat.add_row_mul(k, i, -mat.row(i)[index]);
+                }
+            },
+            None => (),
         }
     }
 }
