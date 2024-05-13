@@ -6,7 +6,6 @@ use crate::Vector;
 use crate::Vector3;
 
 #[allow(unused)]
-#[rustfmt::skip]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Matrix4(
     pub[f32; 4],
@@ -58,6 +57,16 @@ impl Matrix for Matrix4 {
         }
     }
 
+    fn get_mut(&mut self, i: usize, j: usize) -> Option<&mut f32> {
+        match i {
+            0 => Some(&mut self.0[j]),
+            1 => Some(&mut self.1[j]),
+            2 => Some(&mut self.2[j]),
+            3 => Some(&mut self.3[j]),
+            _ => None,
+        }
+    }
+
     fn set(&mut self, i: usize, j: usize, value: f32) -> Result<(), OutOfBoundsError> {
         match i {
             0 => self.0[j] = value,
@@ -97,7 +106,48 @@ impl Matrix for Matrix4 {
         mat
     }
     
-    #[rustfmt::skip]
+    fn inverse(&self) -> Self {
+        let mut matrix = self.clone();
+
+        let n = Self::size();
+        let m = Self::size();
+
+        for k in 0..std::cmp::min(n, m) {
+            let mut max_row = k;
+            for i in k + 1..n {
+                if matrix.get(i, k).unwrap().abs() > matrix.get(max_row, k).unwrap().abs() {
+                    max_row = i;
+                }
+            }
+            matrix.0.swap(k, max_row);
+
+            for i in k + 1..n {
+                let factor = matrix.get(i, k).unwrap() / matrix.get(k, k).unwrap();
+                for j in k..m {
+                    *matrix.get_mut(i, j).unwrap() -= factor * *matrix.get_mut(k, j).unwrap();
+                }
+            }
+        }
+
+        for k in (0..std::cmp::min(n, m)).rev() {
+            for i in (0..k).rev() {
+                let factor = matrix.get(i, k).unwrap() / matrix.get(k, k).unwrap();
+                for j in k..m {
+                    *matrix.get_mut(i, j).unwrap() -= factor * *matrix.get_mut(k, j).unwrap();
+                }
+            }
+        }
+
+        for i in 0..n {
+            let pivot = matrix.get(i, i).unwrap();
+            for j in 0..m {
+                *matrix.get_mut(i, j).unwrap() /= pivot;
+            }
+        }
+
+        matrix
+    }
+    
     fn ptr(&self) -> *const f32 {
         &self.0[0]
     }
