@@ -14,9 +14,7 @@ pub trait Matrix {
     fn row(&self, j: usize) -> &[f32];
     fn column(&self, i: usize) -> &[f32];
     
-    fn zero() -> Self;
+    fn zero() -> Self;    
     fn identity() -> Self;
-
-    fn transpose(&mut self);
-    fn transposition(&self) -> Self;
+    fn transpose(&self) -> Self;
 }

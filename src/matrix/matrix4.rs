@@ -83,22 +83,18 @@ impl Matrix for Matrix4 {
         todo!()
     }
 
-    fn transpose(&mut self) {
+    fn transpose(&self) -> Self {
         let size = self::Matrix4::size();
+        let mut mat = self.clone();
         for i in 0..size {
             for j in i..size {
                 let aux = self.get(i, j);
 
-                self.set(i, j, self.get(j, i).unwrap()).unwrap();
-                self.set(j, i, aux.unwrap()).unwrap();
+                mat.set(i, j, mat.get(j, i).unwrap()).unwrap();
+                mat.set(j, i, aux.unwrap()).unwrap();
             }
         }
-    }
-    
-    fn transposition(&self) -> Self {
-        let mut clone = self.clone();
-        clone.transpose();
-        clone
+        mat
     }
     
     #[rustfmt::skip]
