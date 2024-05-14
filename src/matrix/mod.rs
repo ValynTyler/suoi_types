@@ -31,6 +31,8 @@ pub trait Matrix {
     fn mul_row(&mut self, i: usize, coef: f32);
     fn add_row_mul(&mut self, i_from: usize, i_to: usize, coef: f32);
 
+    fn det(&self) -> f32;
+
     fn zero() -> Self;
     fn identity() -> Self;
     fn transpose(&self) -> Self;

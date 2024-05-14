@@ -183,12 +183,15 @@ impl Matrix for Matrix4 {
         }
     }
     
+    fn det(&self) -> f32 {
+          self.row(0)[0] * self.cofactor(0, 0)
+        - self.row(0)[1] * self.cofactor(0, 1)
+        + self.row(0)[2] * self.cofactor(0, 2)
+        - self.row(0)[3] * self.cofactor(0, 3)
+    }
+    
     fn inverse(&self) -> Self {
-        let mat = self.clone();
-
-
-
-        mat
+        self.adjugate() * (1.0 / self.det())
     }
 }
 
@@ -250,6 +253,22 @@ impl Mul<Vector3> for &Matrix4 {
     }
 }
 
+impl Mul<f32> for Matrix4 {
+    type Output = Matrix4;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        let mut mat = self.clone();
+
+        for i in 0..4 {
+            for j in 0..4 {
+                mat.row_mut(i)[j] *= rhs
+            }
+        }
+
+        mat
+    }
+}
+
 // Display
 impl Display for Matrix4 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -287,6 +306,31 @@ impl Matrix4 {
         }
         
         mat
+    }
+
+    pub fn cofactor(&self, i: usize, j: usize) -> f32 {
+        // f32::powf(-1.0, i as f32 + j as f32) * self.minor(i, j).det()
+        let coef = match (i + j) % 2 == 0 {
+            true => 1.0,
+            false => -1.0,
+        };
+        coef * self.minor(i, j).det()
+    }
+
+    pub fn cofactor_matrix(&self) -> Matrix4 {
+        let mut mat = Matrix4::zero();
+
+        for i in 0..4 {
+            for j in 0..4 {
+                mat.row_mut(i)[j] = self.cofactor(i, j);
+            }
+        }
+
+        mat.transpose()
+    }
+
+    pub fn adjugate(&self) -> Matrix4 {
+        self.cofactor_matrix().transpose()
     }
 
     pub fn translate(translation: Vector3) -> Self {
