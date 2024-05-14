@@ -1,5 +1,7 @@
 use std::{fmt::Display, ops::Mul};
 
+use crate::Angle;
+use crate::Deg;
 use crate::Matrix;
 use crate::Matrix3;
 use crate::OutOfBoundsError;
@@ -341,6 +343,21 @@ impl Matrix4 {
         m
     }
 
+    pub fn rotate_around(axis: Vector3, angle: Deg) -> Self {
+        let r = axis;
+        let theta = angle.rad().0;
+        
+        let sin = theta.sin();
+        let cos = theta.cos();
+
+        Matrix4(
+            [cos + r.x*r.x*(1.0 - cos),        r.x*r.y*(1.0 - cos) - r.z*sin,     r.x*r.z*(1.0 - cos) + r.y*sin, 0.],
+            [r.y*r.x*(1.0 - cos) + r.z*sin,    cos + r.y*r.y*(1.0 - cos),         r.y*r.z*(1.0 - cos) - r.x*sin, 0.],
+            [r.z*r.x*(1.0 - cos) - r.y*sin,    r.z*r.y*(1.0 - cos) + r.x*sin,     cos + r.z*r.z*(1.0 - cos),     0.],
+            [0.0, 0.0, 0.0, 1.0],
+        )
+    }
+
     pub fn uniform_scale(scale: f32) -> Self {
         let mut mat = Matrix4::identity();
         mat.set(0, 0, scale).unwrap();
@@ -380,7 +397,6 @@ impl Matrix4 {
             [ r.z.clone(), u.z.clone(), -f.z.clone(), 0.0],
             [-eye.dot(r), -eye.dot(u),   eye.dot(f),  1.0],
         )
-        // .transposition()
     }
 
     #[rustfmt::skip]
