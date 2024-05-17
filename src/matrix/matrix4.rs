@@ -187,9 +187,9 @@ impl Matrix for Matrix4 {
     
     fn det(&self) -> f32 {
           self.row(0)[0] * self.cofactor(0, 0)
-        - self.row(0)[1] * self.cofactor(0, 1)
-        + self.row(0)[2] * self.cofactor(0, 2)
-        - self.row(0)[3] * self.cofactor(0, 3)
+        - self.row(1)[0] * self.cofactor(1, 0)
+        + self.row(2)[0] * self.cofactor(2, 0)
+        - self.row(3)[0] * self.cofactor(3, 0)
     }
     
     fn inverse(&self) -> Self {
@@ -291,8 +291,8 @@ impl Matrix4 {
             [0.0; 3],
         );
 
-        for x in 0..3 {
-            for y in 0..3 {
+        for y in 0..3 {
+            for x in 0..3 {
                 let p = match y < i {
                     true => 0,
                     false => 1,
@@ -303,7 +303,7 @@ impl Matrix4 {
                     false => 1,
                 };
 
-                mat.row_mut(x)[y] = self.row(x + q)[y + p]
+                mat.row_mut(y)[x] = self.row(y + p)[x + q]
             }
         }
         
@@ -341,6 +341,16 @@ impl Matrix4 {
         m.set(1, 3, translation.y).unwrap();
         m.set(2, 3, translation.z).unwrap();
         m
+    }
+
+    pub fn rotate_y(angle: Deg) -> Self {
+        let theta = angle.rad().0;
+        Matrix4(
+            [theta.cos(),   0.0, theta.sin(),   0.0],
+            [0.0,           1.0, 0.0,           0.0],
+            [-theta.sin(),  0.0, theta.cos(),   0.0],
+            [0.0,           0.0, 0.0,           1.0],
+        )
     }
 
     pub fn rotate_around(axis: Vector3, angle: Deg) -> Self {
