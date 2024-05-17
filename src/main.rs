@@ -1,7 +1,12 @@
-use suoi_types::{Deg, Matrix, Matrix4, Vector3};
+use suoi_types::{Matrix, Matrix4};
 
 fn main() {
-    let m = Matrix4::rotate_around(Vector3::new(1., 0., 0.), Deg(45.0));
+    let m = Matrix4(
+        [0.80, 0.22, -0.56, 0.00],
+        [-0.00, 0.93, 0.37, 0.00],
+        [0.61, -0.30, 0.74, 0.00],
+        [-0.00, -0.00, -10.77, 1.00],
+    );
 
-    println!("{}", m.det());
+    println!("{:.2}", &m * &m.inverse());
 }

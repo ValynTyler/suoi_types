@@ -293,7 +293,6 @@ impl Display for Matrix4 {
                 write!(f, "{:.}", self.row(i)[size-1])?;
                 writeln!(f, "]")?;
             }
-            todo!()
         } 
         Ok(())
     }
@@ -345,7 +344,7 @@ impl Matrix4 {
             }
         }
 
-        mat.transpose()
+        mat
     }
 
     pub fn adjugate(&self) -> Matrix4 {
