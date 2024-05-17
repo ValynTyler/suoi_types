@@ -275,9 +275,26 @@ impl Mul<f32> for Matrix4 {
 impl Display for Matrix4 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let size = Self::size();
-        for j in 0..size {
-            writeln!(f, "{:?}", self.row(j))?;
-        }
+        if let Some(p) = f.precision() {
+            for i in 0..size {
+                write!(f, "[")?;
+                for j in 0..size-1 {
+                    write!(f, "{:.p$}, ", self.row(i)[j])?;
+                }
+                write!(f, "{:.p$}", self.row(i)[size-1])?;
+                writeln!(f, "]")?;
+            }
+        } else {
+            for i in 0..size {
+                write!(f, "[")?;
+                for j in 0..size-1 {
+                    write!(f, "{:.}, ", self.row(i)[j])?;
+                }
+                write!(f, "{:.}", self.row(i)[size-1])?;
+                writeln!(f, "]")?;
+            }
+            todo!()
+        } 
         Ok(())
     }
 }
